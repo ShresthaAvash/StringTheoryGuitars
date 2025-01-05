@@ -6,7 +6,15 @@ package com.StringTheoryGuitar.view;
 
 import com.StringTheoryGuitar.model.GuitarDetails;
 import com.StringTheoryGuitar.util.Validation;
+import com.StringTheoryGuitar.controller.algorithms.LinearSearch;
+import com.StringTheoryGuitar.controller.algorithms.BinarySearch;
+import com.StringTheoryGuitar.controller.algorithms.MergeSort;
+import com.StringTheoryGuitar.controller.algorithms.InsertionSort;
+import com.StringTheoryGuitar.controller.algorithms.SelectionSort;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -72,7 +80,8 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         adminpaneltext = new javax.swing.JLabel();
         addbutton = new javax.swing.JLabel();
         updatebutton = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        sortby = new javax.swing.JComboBox<>();
+        sorttype = new javax.swing.JComboBox<>();
         deletebutton = new javax.swing.JLabel();
         clearbutton = new javax.swing.JLabel();
         sntext = new javax.swing.JTextField();
@@ -99,9 +108,11 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         guitarspanel = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        sorttypeguitar = new javax.swing.JComboBox<>();
+        binarysearch = new javax.swing.JCheckBox();
+        sortbyguitars = new javax.swing.JComboBox<>();
         searchguitars = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchguitarsfield = new javax.swing.JTextField();
         guitarlist1 = new javax.swing.JScrollPane();
         guitartable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -425,13 +436,21 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         });
         adminpanel.add(updatebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, 129, 52));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        sortby.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "SN", "Name", "Brand", "Type", "Price", "Quantity" }));
+        sortby.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                sortbyActionPerformed(evt);
             }
         });
-        adminpanel.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 30, 130, -1));
+        adminpanel.add(sortby, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 610, 90, -1));
+
+        sorttype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort Type", "Insertion", "Merge", "Selection" }));
+        sorttype.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sorttypeActionPerformed(evt);
+            }
+        });
+        adminpanel.add(sorttype, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 610, 90, -1));
 
         deletebutton.setBackground(new java.awt.Color(207, 193, 178));
         deletebutton.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -631,8 +650,32 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         guitarspanel.setPreferredSize(new java.awt.Dimension(990, 700));
         guitarspanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "Item 2", "Item 3", "Item 4" }));
-        guitarspanel.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 120, -1));
+        sorttypeguitar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort Type", "Insertion", "Merge", "Selection" }));
+        sorttypeguitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sorttypeguitarActionPerformed(evt);
+            }
+        });
+        guitarspanel.add(sorttypeguitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 630, 120, -1));
+
+        binarysearch.setBackground(new java.awt.Color(255, 255, 255));
+        binarysearch.setForeground(new java.awt.Color(51, 51, 51));
+        binarysearch.setText("BinarySearch");
+        binarysearch.setOpaque(true);
+        binarysearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                binarysearchActionPerformed(evt);
+            }
+        });
+        guitarspanel.add(binarysearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 600, 110, -1));
+
+        sortbyguitars.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "SN", "Name", "Brand", "Type", "Price", "Quantity" }));
+        sortbyguitars.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortbyguitarsActionPerformed(evt);
+            }
+        });
+        guitarspanel.add(sortbyguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 630, 120, -1));
 
         searchguitars.setBackground(new java.awt.Color(255, 255, 255));
         searchguitars.setForeground(new java.awt.Color(102, 102, 102));
@@ -640,6 +683,9 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         searchguitars.setText("SEARCH");
         searchguitars.setOpaque(true);
         searchguitars.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchguitarsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 searchguitarsMouseEntered(evt);
             }
@@ -648,7 +694,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
             }
         });
         guitarspanel.add(searchguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 600, 60, 20));
-        guitarspanel.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 600, 110, -1));
+        guitarspanel.add(searchguitarsfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 600, 110, -1));
 
         guitartable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1175,9 +1221,9 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_stringtypecomboActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void sortbyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortbyActionPerformed
+        sortData();
+    }//GEN-LAST:event_sortbyActionPerformed
 
     private void searchguitarsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchguitarsMouseEntered
        searchguitars.setBackground(new Color(162, 151, 139));
@@ -1191,6 +1237,262 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityActionPerformed
 
+    private void sorttypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sorttypeActionPerformed
+        sortData();
+    }//GEN-LAST:event_sorttypeActionPerformed
+
+    private void searchguitarsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchguitarsMouseClicked
+        searchGuitarspanel();
+    }//GEN-LAST:event_searchguitarsMouseClicked
+
+    private void binarysearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binarysearchActionPerformed
+        if (binarysearch.isSelected()) {
+            sortbyguitars.setEnabled(true);
+        } else {
+            sortbyguitars.setEnabled(false);
+        }
+    }//GEN-LAST:event_binarysearchActionPerformed
+
+
+private void searchGuitarspanel() {
+    String searchText = searchguitarsfield.getText().trim().toLowerCase();
+    boolean useBinarySearch = binarysearch.isSelected();
+
+    DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
+    List<GuitarDetails> searchList = new ArrayList<>();
+
+    // Populate searchList from the table
+    for (int i = 0; i < model.getRowCount(); i++) {
+        searchList.add(new GuitarDetails(
+                (int) model.getValueAt(i, 0),
+                (String) model.getValueAt(i, 1),
+                (String) model.getValueAt(i, 2),
+                (String) model.getValueAt(i, 3),
+                (double) model.getValueAt(i, 4),
+                "Yes".equals(model.getValueAt(i, 5)),
+                (String) model.getValueAt(i, 6),
+                (int) model.getValueAt(i, 7)
+        ));
+    }
+
+    if (searchText.isEmpty()) {
+        // If search text is empty, repopulate the table with the original data
+        refreshGuitarspanelTable();
+        return;
+    }
+
+    if (useBinarySearch) {
+        // Binary Search (Only by Name)
+
+        // Sort by Name for binary search to work correctly
+        Collections.sort(searchList, Comparator.comparing(GuitarDetails::getName));
+
+        int index = BinarySearch.search(searchList, searchText); // Use the updated BinarySearch
+
+        if (index != -1) {
+            // Found: Update the table with the single result
+            model.setRowCount(0);
+            GuitarDetails guitar = searchList.get(index);
+            model.addRow(new Object[]{
+                    guitar.getSn(),
+                    guitar.getName(),
+                    guitar.getBrand(),
+                    guitar.getType(),
+                    guitar.getPrice(),
+                    guitar.isFreeService() ? "Yes" : "No",
+                    guitar.getStringType(),
+                    guitar.getQuantity()
+            });
+        } else {
+            // Not found
+            JOptionPane.showMessageDialog(this, "No guitars found matching the search criteria.");
+        }
+
+    } else {
+        // Linear Search
+        List<GuitarDetails> results = LinearSearch.search(searchList, searchText); // Use your existing LinearSearch
+
+        if (results.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No guitars found matching the search criteria.");
+        } else {
+            // Update the table with search results
+            model.setRowCount(0);
+            for (GuitarDetails guitar : results) {
+                model.addRow(new Object[]{
+                        guitar.getSn(),
+                        guitar.getName(),
+                        guitar.getBrand(),
+                        guitar.getType(),
+                        guitar.getPrice(),
+                        guitar.isFreeService() ? "Yes" : "No",
+                        guitar.getStringType(),
+                        guitar.getQuantity()
+                });
+            }
+        }
+    }
+}
+    
+    // Helper method to refresh the table with original data
+    private void refreshGuitarspanelTable() {
+        DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
+        model.setRowCount(0); // Clear the table
+
+        // Repopulate the table with the original data
+        for (GuitarDetails guitar : guitarList) {
+            model.addRow(new Object[]{
+                guitar.getSn(),
+                guitar.getName(),
+                guitar.getBrand(),
+                guitar.getType(),
+                guitar.getPrice(),
+                guitar.isFreeService() ? "Yes" : "No",
+                guitar.getStringType(),
+                guitar.getQuantity()
+            });
+        }
+    }
+
+    private void sorttypeguitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sorttypeguitarActionPerformed
+        sortDataGuitarsPanel();
+    }//GEN-LAST:event_sorttypeguitarActionPerformed
+
+    private void sortbyguitarsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortbyguitarsActionPerformed
+        sortDataGuitarsPanel();
+    }//GEN-LAST:event_sortbyguitarsActionPerformed
+
+        private void sortData() {
+        String sortBy = (String) sortby.getSelectedItem();
+        String sortType = (String) sorttype.getSelectedItem();
+
+        if (!"Sort By".equals(sortBy) && !"Sort Type".equals(sortType)) {
+            List<GuitarDetails> dataToSort = new ArrayList<>();
+            DefaultTableModel model = (DefaultTableModel) guitartable.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                dataToSort.add(new GuitarDetails(
+                        (int) model.getValueAt(i, 0),
+                        (String) model.getValueAt(i, 1),
+                        (String) model.getValueAt(i, 2),
+                        (String) model.getValueAt(i, 3),
+                        (double) model.getValueAt(i, 4),
+                        "Yes".equals(model.getValueAt(i, 5)),
+                        (String) model.getValueAt(i, 6),
+                        (int) model.getValueAt(i, 7)
+                ));
+            }
+
+            Comparator<GuitarDetails> comparator = getComparator(sortBy);
+
+            switch (sortType) {
+                case "Insertion":
+                    InsertionSort.sort(dataToSort, comparator);
+                    break;
+                case "Merge":
+                    MergeSort.sort(dataToSort, comparator);
+                    break;
+                case "Selection":
+                    SelectionSort.sort(dataToSort, comparator);
+                    break;
+            }
+
+            // Update table model
+            model.setRowCount(0);
+            for (GuitarDetails guitar : dataToSort) {
+                model.addRow(new Object[]{
+                    guitar.getSn(),
+                    guitar.getName(),
+                    guitar.getBrand(),
+                    guitar.getType(),
+                    guitar.getPrice(),
+                    guitar.isFreeService() ? "Yes" : "No",
+                    guitar.getStringType(),
+                    guitar.getQuantity()
+                });
+            }
+        }
+    }
+
+    // Method to handle sorting for guitarspanel
+    private void sortDataGuitarsPanel() {
+        String sortBy = (String) sortbyguitars.getSelectedItem();
+        String sortType = (String) sorttypeguitar.getSelectedItem();
+
+        if (!"Sort By".equals(sortBy) && !"Sort Type".equals(sortType)) {
+            List<GuitarDetails> dataToSort = new ArrayList<>();
+            DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                dataToSort.add(new GuitarDetails(
+                        (int) model.getValueAt(i, 0),
+                        (String) model.getValueAt(i, 1),
+                        (String) model.getValueAt(i, 2),
+                        (String) model.getValueAt(i, 3),
+                        (double) model.getValueAt(i, 4),
+                        "Yes".equals(model.getValueAt(i, 5)),
+                        (String) model.getValueAt(i, 6),
+                        (int) model.getValueAt(i, 7)
+                ));
+            }
+
+            Comparator<GuitarDetails> comparator = getComparator(sortBy);
+
+            switch (sortType) {
+                case "Insertion":
+                    InsertionSort.sort(dataToSort, comparator);
+                    break;
+                case "Merge":
+                    MergeSort.sort(dataToSort, comparator);
+                    break;
+                case "Selection":
+                    SelectionSort.sort(dataToSort, comparator);
+                    break;
+            }
+
+            // Update table model
+            model.setRowCount(0);
+            for (GuitarDetails guitar : dataToSort) {
+                model.addRow(new Object[]{
+                        guitar.getSn(),
+                        guitar.getName(),
+                        guitar.getBrand(),
+                        guitar.getType(),
+                        guitar.getPrice(),
+                        guitar.isFreeService() ? "Yes" : "No",
+                        guitar.getStringType(),
+                        guitar.getQuantity()
+                });
+            }
+        }
+    }
+
+    // Method to handle searching for guitarspanel
+
+
+
+    // Method to get comparator based on selected column
+    private Comparator<GuitarDetails> getComparator(String sortBy) {
+        switch (sortBy) {
+            case "SN":
+                return Comparator.comparing(GuitarDetails::getSn);
+            case "Name":
+                return Comparator.comparing(GuitarDetails::getName);
+            case "Brand":
+                return Comparator.comparing(GuitarDetails::getBrand);
+            case "Type":
+                return Comparator.comparing(GuitarDetails::getType);
+            case "Price":
+                return Comparator.comparing(GuitarDetails::getPrice);
+            case "Free Service":
+                return Comparator.comparing(GuitarDetails::isFreeService);
+            case "StringType":
+                return Comparator.comparing(GuitarDetails::getStringType);
+            case "Quantity":
+                return Comparator.comparing(GuitarDetails::getQuantity);
+            default:
+                return null;
+        }
+    }
+
+    
     private void loadScreen(String screenName) {
         cardLayout.show(getContentPane(), screenName);
     }
@@ -1268,6 +1570,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     private javax.swing.JPanel adminpanel;
     private javax.swing.JLabel adminpaneltext;
     private javax.swing.JLabel backgroundimg;
+    private javax.swing.JCheckBox binarysearch;
     private javax.swing.JComboBox<String> brandcombo;
     private javax.swing.JLabel clearbutton;
     private javax.swing.JLabel deletebutton;
@@ -1283,8 +1586,6 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     private javax.swing.JLabel homebutton;
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel homeviewguitar;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1299,7 +1600,6 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel loginbutton;
     private javax.swing.JPanel loginpanel;
     private javax.swing.JLabel logoutbutton;
@@ -1310,6 +1610,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     private javax.swing.JTextField pricetext;
     private javax.swing.JTextField quantity;
     private javax.swing.JLabel searchguitars;
+    private javax.swing.JTextField searchguitarsfield;
     private javax.swing.JCheckBox servicebox;
     private javax.swing.JLabel snlabel;
     private javax.swing.JLabel snlabel1;
@@ -1318,6 +1619,10 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     private javax.swing.JLabel snlabel4;
     private javax.swing.JLabel snlabel5;
     private javax.swing.JTextField sntext;
+    private javax.swing.JComboBox<String> sortby;
+    private javax.swing.JComboBox<String> sortbyguitars;
+    private javax.swing.JComboBox<String> sorttype;
+    private javax.swing.JComboBox<String> sorttypeguitar;
     private javax.swing.JComboBox<String> stringtypecombo;
     private javax.swing.JLabel stringtypelabel;
     private javax.swing.JComboBox<String> typecombo1;
