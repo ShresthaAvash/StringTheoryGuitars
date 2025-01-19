@@ -8,35 +8,29 @@ import java.util.List;
 
 /**
  *
- * @author PC
+ * @author 23048676 Avash Shrestha
  */
 public class BinarySearch {
-    public static int search(List<GuitarDetails> list, String name) {
-        int l = 0;
-        int r = list.size() - 1;
-        name = name.toLowerCase(); // Convert search string to lowercase
-
-        while (l <= r) {
-            int m = l + (r - l) / 2;
-            String midName = list.get(m).getName().toLowerCase(); // Convert model name to lowercase
-
-            // Check for an exact match
-            if (midName.equals(name)) {
-                return m;
-            }
-
-            // If the search string is lexicographically greater, ignore the left half
-            if (midName.compareTo(name) < 0) {
-                l = m + 1;
-            }
-            // If the search string is lexicographically smaller, ignore the right half
-            else {
-                r = m - 1;
+    public static int search(List<GuitarDetails> guitarList, String searchName) {
+        int low = 0;
+        int high = guitarList.size() - 1;
+        
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            String midName = guitarList.get(mid).getName().toLowerCase();
+            int comparison = midName.compareTo(searchName);
+            
+            if (comparison == 0) {
+                return mid;
+            } else if (comparison < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
-
-        return -1; // Not found
+        return -1;
     }
+
 }
 
 

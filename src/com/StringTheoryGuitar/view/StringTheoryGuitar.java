@@ -6,14 +6,13 @@ package com.StringTheoryGuitar.view;
 
 import com.StringTheoryGuitar.model.GuitarDetails;
 import com.StringTheoryGuitar.util.Validation;
-import com.StringTheoryGuitar.controller.algorithms.LinearSearch;
 import com.StringTheoryGuitar.controller.algorithms.BinarySearch;
 import com.StringTheoryGuitar.controller.algorithms.MergeSort;
 import com.StringTheoryGuitar.controller.algorithms.InsertionSort;
 import com.StringTheoryGuitar.controller.algorithms.SelectionSort;
+import com.StringThoeryGuitar.datastucture.CustomStack;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,11 +20,13 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author Avash Shrestha
+ * @author 23048676 Avash Shrestha
  */
 public class StringTheoryGuitar extends javax.swing.JFrame {
     private java.awt.CardLayout cardLayout;
     private List<GuitarDetails> guitarList; // To store the list of guitars
+    private CustomStack recentActions;
+    private CustomStack recentEdits;
     
     /**
      * Creates new form StringTheoryGuitar
@@ -34,6 +35,8 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         initComponents();
         initializeLayout();
         initializeData();
+        recentActions = new CustomStack(5);
+        recentEdits = new CustomStack(5);
     }
     
     private void initializeLayout() {
@@ -60,19 +63,15 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         mainpanel = new javax.swing.JPanel();
         navigationbar = new javax.swing.JPanel();
         homebutton = new javax.swing.JLabel();
-        aboutusbutton = new javax.swing.JLabel();
+        recentsbutton = new javax.swing.JLabel();
         guitarsbutton = new javax.swing.JLabel();
         adminbutton = new javax.swing.JLabel();
         logoutbutton = new javax.swing.JLabel();
         homepanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         homeadd = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        RecentView = new javax.swing.JLabel();
         homeviewguitar = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         backgroundimg = new javax.swing.JLabel();
         adminpanel = new javax.swing.JPanel();
         guitarlist = new javax.swing.JScrollPane();
@@ -99,17 +98,20 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         typecombo1 = new javax.swing.JComboBox<>();
         quantity = new javax.swing.JTextField();
         snlabel5 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        aboutuspanel = new javax.swing.JPanel();
+        Background = new javax.swing.JLabel();
+        recentspanel = new javax.swing.JPanel();
+        recentlytextedit = new javax.swing.JLabel();
+        recentlytext = new javax.swing.JLabel();
+        Clearrecentsbutton = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        newlyeditedtext = new javax.swing.JTextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        newlyaddedtext = new javax.swing.JTextArea();
         aboutustitle = new javax.swing.JLabel();
-        aboutp1 = new javax.swing.JLabel();
-        aboutp2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         guitarspanel = new javax.swing.JPanel();
+        resetButton = new javax.swing.JButton();
         sorttypeguitar = new javax.swing.JComboBox<>();
-        binarysearch = new javax.swing.JCheckBox();
         sortbyguitars = new javax.swing.JComboBox<>();
         searchguitars = new javax.swing.JLabel();
         searchguitarsfield = new javax.swing.JTextField();
@@ -153,21 +155,21 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
             }
         });
 
-        aboutusbutton.setBackground(new java.awt.Color(207, 193, 178));
-        aboutusbutton.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
-        aboutusbutton.setForeground(new java.awt.Color(102, 102, 102));
-        aboutusbutton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        aboutusbutton.setText("ABOUT US");
-        aboutusbutton.setOpaque(true);
-        aboutusbutton.addMouseListener(new java.awt.event.MouseAdapter() {
+        recentsbutton.setBackground(new java.awt.Color(207, 193, 178));
+        recentsbutton.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        recentsbutton.setForeground(new java.awt.Color(102, 102, 102));
+        recentsbutton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        recentsbutton.setText("RECENTS");
+        recentsbutton.setOpaque(true);
+        recentsbutton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                aboutusbuttonMouseClicked(evt);
+                recentsbuttonMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                aboutusbuttonMouseEntered(evt);
+                recentsbuttonMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                aboutusbuttonMouseExited(evt);
+                recentsbuttonMouseExited(evt);
             }
         });
 
@@ -230,10 +232,10 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         navigationbarLayout.setHorizontalGroup(
             navigationbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(homebutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(aboutusbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-            .addComponent(guitarsbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-            .addComponent(adminbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-            .addComponent(logoutbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+            .addComponent(recentsbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+            .addComponent(guitarsbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+            .addComponent(adminbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+            .addComponent(logoutbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
         );
         navigationbarLayout.setVerticalGroup(
             navigationbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +243,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(homebutton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(aboutusbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(recentsbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(guitarsbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -251,7 +253,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 .addGap(41, 41, 41))
         );
 
-        mainpanel.add(navigationbar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        mainpanel.add(navigationbar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 240, -1));
 
         homepanel.setBackground(new java.awt.Color(255, 255, 255));
         homepanel.setMaximumSize(new java.awt.Dimension(1200, 700));
@@ -261,19 +263,10 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("String Theory Guitar");
-        jLabel7.setOpaque(true);
-        homepanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 400, 80));
-
-        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("Keep the Music Coming");
-        jLabel8.setOpaque(true);
-        homepanel.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 550, 410, 50));
+        jLabel7.setText("STRING THEORY GUITARS");
+        homepanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, 560, 80));
 
         homeadd.setBackground(new java.awt.Color(255, 255, 255));
         homeadd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -292,21 +285,32 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 homeaddMouseExited(evt);
             }
         });
-        homepanel.add(homeadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 290, 50));
+        homepanel.add(homeadd, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 480, 550, 120));
 
-        jLabel9.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Effortlessly Manage your Inventory");
-        jLabel9.setOpaque(true);
-        homepanel.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, 430, 50));
+        RecentView.setBackground(new java.awt.Color(255, 255, 255));
+        RecentView.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        RecentView.setForeground(new java.awt.Color(102, 102, 102));
+        RecentView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        RecentView.setText("View Recents");
+        RecentView.setOpaque(true);
+        RecentView.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RecentViewMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                RecentViewMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                RecentViewMouseExited(evt);
+            }
+        });
+        homepanel.add(RecentView, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 220, 390, 180));
 
         homeviewguitar.setBackground(new java.awt.Color(255, 255, 255));
         homeviewguitar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         homeviewguitar.setForeground(new java.awt.Color(102, 102, 102));
         homeviewguitar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        homeviewguitar.setText("View Guitars On Based on their types");
+        homeviewguitar.setText("View Guitars");
         homeviewguitar.setOpaque(true);
         homeviewguitar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -319,36 +323,9 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 homeviewguitarMouseExited(evt);
             }
         });
-        homepanel.add(homeviewguitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, 460, 50));
+        homepanel.add(homeviewguitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 390, 180));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/classicguitar.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel6)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel6)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
-
-        homepanel.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 240, 370, 290));
-
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/music icon.png"))); // NOI18N
-        homepanel.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 400, 130, 130));
-
-        backgroundimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/backgroundimg.png"))); // NOI18N
+        backgroundimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/Background.png"))); // NOI18N
         homepanel.add(backgroundimg, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, -1, -1));
 
         mainpanel.add(homepanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 0, 990, 700));
@@ -392,10 +369,9 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         adminpaneltext.setBackground(new java.awt.Color(255, 255, 255));
         adminpaneltext.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
-        adminpaneltext.setForeground(new java.awt.Color(102, 102, 102));
+        adminpaneltext.setForeground(new java.awt.Color(255, 255, 255));
         adminpaneltext.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         adminpaneltext.setText("ADMIN PANEL");
-        adminpaneltext.setOpaque(true);
         adminpanel.add(adminpaneltext, new org.netbeans.lib.awtextra.AbsoluteConstraints(327, 6, 327, 59));
 
         addbutton.setBackground(new java.awt.Color(207, 193, 178));
@@ -415,7 +391,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 addbuttonMouseExited(evt);
             }
         });
-        adminpanel.add(addbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 129, 52));
+        adminpanel.add(addbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 430, 129, 52));
 
         updatebutton.setBackground(new java.awt.Color(207, 193, 178));
         updatebutton.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -434,7 +410,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 updatebuttonMouseExited(evt);
             }
         });
-        adminpanel.add(updatebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, 129, 52));
+        adminpanel.add(updatebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 430, 129, 52));
 
         sortby.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "SN", "Name", "Brand", "Type", "Price", "Quantity" }));
         sortby.addActionListener(new java.awt.event.ActionListener() {
@@ -488,7 +464,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 clearbuttonMouseExited(evt);
             }
         });
-        adminpanel.add(clearbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 430, 129, 52));
+        adminpanel.add(clearbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 430, 129, 52));
 
         sntext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -507,16 +483,16 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         stringtypelabel.setBackground(new java.awt.Color(255, 255, 255));
         stringtypelabel.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        stringtypelabel.setForeground(new java.awt.Color(255, 255, 255));
         stringtypelabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         stringtypelabel.setText("String Type");
-        stringtypelabel.setOpaque(true);
         adminpanel.add(stringtypelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 510, 80, -1));
 
         snlabel.setBackground(new java.awt.Color(255, 255, 255));
         snlabel.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel.setForeground(new java.awt.Color(255, 255, 255));
         snlabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel.setText("SN");
-        snlabel.setOpaque(true);
         adminpanel.add(snlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 510, 40, -1));
 
         guitarmodeltext.addActionListener(new java.awt.event.ActionListener() {
@@ -528,23 +504,23 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         snlabel1.setBackground(new java.awt.Color(255, 255, 255));
         snlabel1.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel1.setForeground(new java.awt.Color(255, 255, 255));
         snlabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel1.setText("Guitar Model");
-        snlabel1.setOpaque(true);
         adminpanel.add(snlabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 510, -1, -1));
 
         snlabel2.setBackground(new java.awt.Color(255, 255, 255));
         snlabel2.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel2.setForeground(new java.awt.Color(255, 255, 255));
         snlabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel2.setText("Brand");
-        snlabel2.setOpaque(true);
         adminpanel.add(snlabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, -1, -1));
 
         snlabel3.setBackground(new java.awt.Color(255, 255, 255));
         snlabel3.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel3.setForeground(new java.awt.Color(255, 255, 255));
         snlabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel3.setText("Type");
-        snlabel3.setOpaque(true);
         adminpanel.add(snlabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 510, 50, -1));
 
         brandcombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gibson", "Fender", "Enya", "Deviser" }));
@@ -564,20 +540,22 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         snlabel4.setBackground(new java.awt.Color(255, 255, 255));
         snlabel4.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel4.setForeground(new java.awt.Color(255, 255, 255));
         snlabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel4.setText("Price");
-        snlabel4.setOpaque(true);
         adminpanel.add(snlabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 510, -1, -1));
 
         servicebox.setBackground(new java.awt.Color(255, 255, 255));
+        servicebox.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        servicebox.setForeground(new java.awt.Color(255, 255, 255));
         servicebox.setText("Free Service");
-        servicebox.setOpaque(true);
+        servicebox.setContentAreaFilled(false);
         servicebox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 serviceboxActionPerformed(evt);
             }
         });
-        adminpanel.add(servicebox, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 590, -1, -1));
+        adminpanel.add(servicebox, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 610, 110, 20));
 
         typecombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acoustic", "SemiAcoustic", "Electric" }));
         typecombo1.addActionListener(new java.awt.event.ActionListener() {
@@ -596,53 +574,81 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
 
         snlabel5.setBackground(new java.awt.Color(255, 255, 255));
         snlabel5.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        snlabel5.setForeground(new java.awt.Color(255, 255, 255));
         snlabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         snlabel5.setText("Quantity");
-        snlabel5.setOpaque(true);
         adminpanel.add(snlabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 580, -1, -1));
 
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/backgroundimg.png"))); // NOI18N
-        adminpanel.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/Background.png"))); // NOI18N
+        adminpanel.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
 
         mainpanel.add(adminpanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 0, -1, 700));
 
-        aboutuspanel.setBackground(new java.awt.Color(255, 255, 255));
-        aboutuspanel.setMinimumSize(new java.awt.Dimension(0, 700));
-        aboutuspanel.setPreferredSize(new java.awt.Dimension(990, 700));
-        aboutuspanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        recentspanel.setBackground(new java.awt.Color(255, 255, 255));
+        recentspanel.setMinimumSize(new java.awt.Dimension(0, 700));
+        recentspanel.setPreferredSize(new java.awt.Dimension(990, 700));
+        recentspanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        recentlytextedit.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        recentlytextedit.setForeground(new java.awt.Color(255, 255, 255));
+        recentlytextedit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        recentlytextedit.setText("Recently Edited");
+        recentspanel.add(recentlytextedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 150, 200, 40));
+
+        recentlytext.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        recentlytext.setForeground(new java.awt.Color(255, 255, 255));
+        recentlytext.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        recentlytext.setText("Recently Added");
+        recentspanel.add(recentlytext, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 200, 40));
+
+        Clearrecentsbutton.setBackground(new java.awt.Color(207, 193, 178));
+        Clearrecentsbutton.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        Clearrecentsbutton.setForeground(new java.awt.Color(102, 102, 102));
+        Clearrecentsbutton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Clearrecentsbutton.setText("Clear");
+        Clearrecentsbutton.setOpaque(true);
+        Clearrecentsbutton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ClearrecentsbuttonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ClearrecentsbuttonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                ClearrecentsbuttonMouseExited(evt);
+            }
+        });
+        recentspanel.add(Clearrecentsbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 370, 110, 60));
+
+        newlyeditedtext.setEditable(false);
+        newlyeditedtext.setBackground(new java.awt.Color(255, 255, 255));
+        newlyeditedtext.setColumns(20);
+        newlyeditedtext.setFont(new java.awt.Font("Microsoft YaHei", 0, 18)); // NOI18N
+        newlyeditedtext.setRows(5);
+        jScrollPane2.setViewportView(newlyeditedtext);
+
+        recentspanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 210, 280, 400));
+
+        newlyaddedtext.setEditable(false);
+        newlyaddedtext.setBackground(new java.awt.Color(255, 255, 255));
+        newlyaddedtext.setColumns(20);
+        newlyaddedtext.setFont(new java.awt.Font("Microsoft YaHei", 0, 18)); // NOI18N
+        newlyaddedtext.setRows(5);
+        jScrollPane1.setViewportView(newlyaddedtext);
+
+        recentspanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, 280, 400));
 
         aboutustitle.setBackground(new java.awt.Color(255, 255, 255));
         aboutustitle.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
-        aboutustitle.setForeground(new java.awt.Color(102, 102, 102));
+        aboutustitle.setForeground(new java.awt.Color(255, 255, 255));
         aboutustitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        aboutustitle.setText("ABOUT US");
-        aboutustitle.setOpaque(true);
-        aboutuspanel.add(aboutustitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 230, 72));
+        aboutustitle.setText("RECENTS");
+        recentspanel.add(aboutustitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 210, 72));
 
-        aboutp1.setBackground(new java.awt.Color(255, 255, 255));
-        aboutp1.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
-        aboutp1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        aboutp1.setText("<html>\nString Theory Guitars is a boutique guitar company known for its<br>\n handcrafted instruments, designed with both performance and <br>\naesthetics in mind. Combining traditional craftsmanship with<br>\n modern techniques, each guitar is meticulously crafted to produce<br>\n rich, resonant tones. String Theory Guitars offers a wide range of<br>\n models, from sleek, minimalist designs to more intricate, visually<br>\n striking pieces, ensuring there’s a perfect guitar for every musicians<br>\n needs.<br>\n</html>");
-        aboutp1.setOpaque(true);
-        aboutuspanel.add(aboutp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 470, 187));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/Background.png"))); // NOI18N
+        recentspanel.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
 
-        aboutp2.setBackground(new java.awt.Color(255, 255, 255));
-        aboutp2.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
-        aboutp2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        aboutp2.setText("<html>\n With a focus on high-quality materials and attention to<br>\n detail, String Theory Guitars ensures that every guitar<br>\n not only sounds exceptional but feels comfortable to<br>\n play. Their instruments are built to last, designed for<br>\n both beginners and professional musicians looking to<br>\n elevate their sound. Whether you’re playing on stage or <br>\nin the studio, String Theory Guitars is committed to<br>\n providing a unique and reliable instrument for musicians<br>\n who value both form and function.<br>\n</html>");
-        aboutp2.setOpaque(true);
-        aboutuspanel.add(aboutp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 380, 400, 233));
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/aboutimg2.png"))); // NOI18N
-        aboutuspanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 390, -1));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/aboutimg1.png"))); // NOI18N
-        aboutuspanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, -1, 240));
-
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/backgroundimg.png"))); // NOI18N
-        aboutuspanel.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
-
-        mainpanel.add(aboutuspanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 0, 990, 700));
+        mainpanel.add(recentspanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 0, 990, 700));
 
         guitarspanel.setBackground(new java.awt.Color(255, 255, 255));
         guitarspanel.setMaximumSize(new java.awt.Dimension(32767, 700));
@@ -650,24 +656,21 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         guitarspanel.setPreferredSize(new java.awt.Dimension(990, 700));
         guitarspanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
+        guitarspanel.add(resetButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 130, 80, 20));
+
         sorttypeguitar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort Type", "Insertion", "Merge", "Selection" }));
         sorttypeguitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sorttypeguitarActionPerformed(evt);
             }
         });
-        guitarspanel.add(sorttypeguitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 630, 120, -1));
-
-        binarysearch.setBackground(new java.awt.Color(255, 255, 255));
-        binarysearch.setForeground(new java.awt.Color(51, 51, 51));
-        binarysearch.setText("BinarySearch");
-        binarysearch.setOpaque(true);
-        binarysearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                binarysearchActionPerformed(evt);
-            }
-        });
-        guitarspanel.add(binarysearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 600, 110, -1));
+        guitarspanel.add(sorttypeguitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 120, -1));
 
         sortbyguitars.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "SN", "Name", "Brand", "Type", "Price", "Quantity" }));
         sortbyguitars.addActionListener(new java.awt.event.ActionListener() {
@@ -675,7 +678,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 sortbyguitarsActionPerformed(evt);
             }
         });
-        guitarspanel.add(sortbyguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 630, 120, -1));
+        guitarspanel.add(sortbyguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, 120, -1));
 
         searchguitars.setBackground(new java.awt.Color(255, 255, 255));
         searchguitars.setForeground(new java.awt.Color(102, 102, 102));
@@ -693,8 +696,8 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
                 searchguitarsMouseExited(evt);
             }
         });
-        guitarspanel.add(searchguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 600, 60, 20));
-        guitarspanel.add(searchguitarsfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 600, 110, -1));
+        guitarspanel.add(searchguitars, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 130, 60, 20));
+        guitarspanel.add(searchguitarsfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 130, 110, 20));
 
         guitartable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -725,17 +728,16 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
             guitartable1.getColumnModel().getColumn(7).setResizable(false);
         }
 
-        guitarspanel.add(guitarlist1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 816, 401));
+        guitarspanel.add(guitarlist1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 816, 450));
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Microsoft YaHei", 1, 48)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("GUITARS");
-        jLabel2.setOpaque(true);
         guitarspanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(367, 49, 240, -1));
 
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/backgroundimg.png"))); // NOI18N
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/StringTheoryGuitar/resources/Background.png"))); // NOI18N
         guitarspanel.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 0, -1, -1));
 
         mainpanel.add(guitarspanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 0, 990, 700));
@@ -844,8 +846,9 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill out Password");
         } else if (usernametextfield.getText().equals("admin") && passtextfield.getText().equals("admin")) {
             loadScreen("mainpanel");
+            homepanel.setVisible(true);
             adminpanel.setVisible(false);
-            aboutuspanel.setVisible(false);
+            recentspanel.setVisible(false);
             guitarspanel.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(null, "Wrong username or password!", "Message", JOptionPane.ERROR_MESSAGE);
@@ -860,13 +863,13 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         homebutton.setBackground(new Color(207, 193, 178));
     }//GEN-LAST:event_homebuttonMouseExited
 
-    private void aboutusbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutusbuttonMouseEntered
-        aboutusbutton.setBackground(new Color(162, 151, 139));
-    }//GEN-LAST:event_aboutusbuttonMouseEntered
+    private void recentsbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recentsbuttonMouseEntered
+        recentsbutton.setBackground(new Color(162, 151, 139));
+    }//GEN-LAST:event_recentsbuttonMouseEntered
 
-    private void aboutusbuttonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutusbuttonMouseExited
-        aboutusbutton.setBackground(new Color(207, 193, 178));
-    }//GEN-LAST:event_aboutusbuttonMouseExited
+    private void recentsbuttonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recentsbuttonMouseExited
+        recentsbutton.setBackground(new Color(207, 193, 178));
+    }//GEN-LAST:event_recentsbuttonMouseExited
 
     private void guitarsbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guitarsbuttonMouseEntered
         guitarsbutton.setBackground(new Color(162, 151, 139));
@@ -888,14 +891,14 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         adminpanel.setVisible(false);
         homepanel.setVisible(true);
         guitarspanel.setVisible(false);
-        aboutuspanel.setVisible(false);
+        recentspanel.setVisible(false);
     }//GEN-LAST:event_homebuttonMouseClicked
 
     private void adminbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminbuttonMouseClicked
         adminpanel.setVisible(true);
         homepanel.setVisible(false);
         guitarspanel.setVisible(false);
-        aboutuspanel.setVisible(false);
+        recentspanel.setVisible(false);
     }//GEN-LAST:event_adminbuttonMouseClicked
 
     private void addbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseEntered
@@ -922,17 +925,17 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         deletebutton.setBackground(new Color(207, 193, 178));
     }//GEN-LAST:event_deletebuttonMouseExited
 
-    private void aboutusbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutusbuttonMouseClicked
+    private void recentsbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recentsbuttonMouseClicked
         adminpanel.setVisible(false);
         homepanel.setVisible(false);
         guitarspanel.setVisible(false);
-        aboutuspanel.setVisible(true);
-    }//GEN-LAST:event_aboutusbuttonMouseClicked
+        recentspanel.setVisible(true);
+    }//GEN-LAST:event_recentsbuttonMouseClicked
 
     private void guitarsbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guitarsbuttonMouseClicked
         adminpanel.setVisible(false);
         homepanel.setVisible(false);
-        aboutuspanel.setVisible(false);
+        recentspanel.setVisible(false);
         guitarspanel.setVisible(true);
     }//GEN-LAST:event_guitarsbuttonMouseClicked
 
@@ -979,6 +982,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         brandcombo.setSelectedIndex(0);
         pricetext.setText("");
         servicebox.setSelected(false);
+        quantity.setText("");
         
     }//GEN-LAST:event_clearbuttonMouseClicked
 
@@ -1018,7 +1022,7 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         adminpanel.setVisible(true);
         homepanel.setVisible(false);
         guitarspanel.setVisible(false);
-        aboutuspanel.setVisible(false);
+        recentspanel.setVisible(false);
     }//GEN-LAST:event_homeaddMouseClicked
 
     private void homeviewguitarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeviewguitarMouseEntered
@@ -1033,145 +1037,165 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
         adminpanel.setVisible(false);
         homepanel.setVisible(false);
         guitarspanel.setVisible(true);
-        aboutuspanel.setVisible(false);
+        recentspanel.setVisible(false);
     }//GEN-LAST:event_homeviewguitarMouseClicked
 
     private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
-        try {
-            // Get input values
-            int sn = Integer.parseInt(sntext.getText().trim());
-            String model = guitarmodeltext.getText().trim();
-            String brand = brandcombo.getSelectedItem().toString();
-            String type = typecombo1.getSelectedItem().toString();
-            double price = Double.parseDouble(pricetext.getText().trim());
-            String stringType = stringtypecombo.getSelectedItem().toString();
-            boolean freeService = servicebox.isSelected();
-            int Quantity = Integer.parseInt(quantity.getText().trim());
+    try {
+        // Get input values
+        int sn = Integer.parseInt(sntext.getText().trim());
+        String model = guitarmodeltext.getText().trim();
+        String brand = brandcombo.getSelectedItem().toString();
+        String type = typecombo1.getSelectedItem().toString();
+        double price = Double.parseDouble(pricetext.getText().trim());
+        String stringType = stringtypecombo.getSelectedItem().toString();
+        boolean freeService = servicebox.isSelected();
+        int Quantity = Integer.parseInt(quantity.getText().trim());
 
-            // Validate inputs
-            if (!Validation.isValidSN(sn, guitartable1)) {
-                JOptionPane.showMessageDialog(this, "Serial Number must be unique and greater than 0! Or Update the table!!!");
-                return;
-            }
-            if (!Validation.isValidModelName(model)) {
-                JOptionPane.showMessageDialog(this, "Invalid Guitar Model Name! Must not be empty.");
-                return;
-            }
-            if (!Validation.isValidPrice(price)) {
-                JOptionPane.showMessageDialog(this, "Invalid Price! Must be a positive number.");
-                return;
-            }
-            if (!Validation.isValidQuantity(Quantity)) {
-                JOptionPane.showMessageDialog(this, "Invalid Quantity! Quantity must be a valid positive number and greater than 0.");
-                return;
-            }
-
-            // Add validated data to the table
-            DefaultTableModel modelTable = (DefaultTableModel) guitartable1.getModel();
-            modelTable.addRow(new Object[]{
-                sn, model, brand, type, price, freeService ? "Yes" : "No", stringType, Quantity
-            });
-
-            // Add validated data to the table
-            DefaultTableModel modelTable1 = (DefaultTableModel) guitartable.getModel();
-            modelTable1.addRow(new Object[]{
-                sn, model, brand, type, price, freeService ? "Yes" : "No", stringType, Quantity
-            });
-            
-            // Clear input fields after adding
-            sntext.setText("");
-            guitarmodeltext.setText("");
-            pricetext.setText("");
-            brandcombo.setSelectedIndex(0);
-            typecombo1.setSelectedIndex(0);
-            stringtypecombo.setSelectedIndex(0);
-            servicebox.setSelected(false);
-
-            JOptionPane.showMessageDialog(this, "Guitar added successfully!");
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid input format! Please check your entries.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + ex.getMessage());
+        // Validate inputs
+        if (!Validation.isValidSN(sn, guitartable)) {
+            JOptionPane.showMessageDialog(this, "Serial Number must be unique and greater than 0! Or Update the table!!!");
+            return;
         }
+        if (!Validation.isValidModelName(model)) {
+            JOptionPane.showMessageDialog(this, "Invalid Guitar Model Name! Must not be empty.");
+            return;
+        }
+        if (!Validation.isValidPrice(price)) {
+            JOptionPane.showMessageDialog(this, "Invalid Price! Must be a positive number.");
+            return;
+        }
+        if (!Validation.isValidQuantity(Quantity)) {
+            JOptionPane.showMessageDialog(this, "Invalid Quantity! Quantity must be a valid positive number and greater than 0.");
+            return;
+        }
+
+        // Create a GuitarDetails object
+        GuitarDetails newGuitar = new GuitarDetails(sn, model, brand, type, price, freeService, stringType, Quantity);
+
+        // Add the new guitar to guitarList
+        guitarList.add(newGuitar);
+
+        // Update both table models
+        DefaultTableModel modelTable = (DefaultTableModel) guitartable.getModel();
+        DefaultTableModel modelTable1 = (DefaultTableModel) guitartable1.getModel();
+
+        Object[] rowData = {sn, model, brand, type, price, freeService ? "Yes" : "No", stringType, Quantity};
+        modelTable.addRow(rowData);
+        modelTable1.addRow(rowData);
+
+        // Push action to stack
+        String action = sn + " " + model;
+        recentActions.push(action);
+
+        // Update recents panel (newly added)
+        newlyaddedtext.setText(recentActions.getRecentActions());
+
+        // Clear input fields after adding
+        sntext.setText("");
+        guitarmodeltext.setText("");
+        pricetext.setText("");
+        brandcombo.setSelectedIndex(0);
+        typecombo1.setSelectedIndex(0);
+        stringtypecombo.setSelectedIndex(0);
+        servicebox.setSelected(false);
+        quantity.setText("");
+
+        JOptionPane.showMessageDialog(this, "Guitar added successfully!");
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Invalid input format! Please check your entries.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + ex.getMessage());
+    }
+
     }//GEN-LAST:event_addbuttonMouseClicked
 
     private void updatebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updatebuttonMouseClicked
         try {
-            // Get input values
-            int sn = Integer.parseInt(sntext.getText().trim());
-            String model = guitarmodeltext.getText().trim();
-            String brand = brandcombo.getSelectedItem().toString();
-            String type = typecombo1.getSelectedItem().toString();
-            double price = Double.parseDouble(pricetext.getText().trim());
-            String stringType = stringtypecombo.getSelectedItem().toString();
-            boolean freeService = servicebox.isSelected();
-            int Quantity = Integer.parseInt(quantity.getText().trim());
+        // Get input values
+        int sn = Integer.parseInt(sntext.getText().trim());
+        String model = guitarmodeltext.getText().trim();
+        String brand = brandcombo.getSelectedItem().toString();
+        String type = typecombo1.getSelectedItem().toString();
+        double price = Double.parseDouble(pricetext.getText().trim());
+        String stringType = stringtypecombo.getSelectedItem().toString();
+        boolean freeService = servicebox.isSelected();
+        int Quantity = Integer.parseInt(quantity.getText().trim());
 
-            // Get the table model
-            DefaultTableModel modelTable = (DefaultTableModel) guitartable1.getModel();
-            boolean found = false;
-            DefaultTableModel modelTable1 = (DefaultTableModel) guitartable.getModel();
-            boolean found1 = false;
-            
-            if (!Validation.isValidQuantity(Quantity)) {
-                JOptionPane.showMessageDialog(this, "Invalid Quantity! Quantity must be a valid positive number and greater than 0.");
-                return;
-            }
+        // Get the table model
+        DefaultTableModel modelTable = (DefaultTableModel) guitartable1.getModel();
+        boolean found = false;
+        DefaultTableModel modelTable1 = (DefaultTableModel) guitartable.getModel();
+        boolean found1 = false;
 
-            // Iterate through the table to find the SN
-            for (int i = 0; i < modelTable.getRowCount(); i++) {
-                int existingSN = (int) modelTable.getValueAt(i, 0); // Column 0 is SN
-                if (existingSN == sn) {
-                    // SN found - Update row data
-                    modelTable.setValueAt(model, i, 1); // Update Model
-                    modelTable.setValueAt(brand, i, 2); // Update Brand
-                    modelTable.setValueAt(type, i, 3); // Update Type
-                    modelTable.setValueAt(price, i, 4); // Update Price
-                    modelTable.setValueAt(freeService ? "Yes" : "No", i, 5); // Update Free Service
-                    modelTable.setValueAt(stringType, i, 6); // Update String Type
-                    modelTable.setValueAt(Quantity, i, 7); // Update Quantity
-                    found = true;
-                    JOptionPane.showMessageDialog(this, "Guitar updated successfully!");
-                    break;
-                }
-            }
-            
-            // Iterate through the table to find the SN
-            for (int i = 0; i < modelTable1.getRowCount(); i++) {
-                int existingSN = (int) modelTable1.getValueAt(i, 0); // Column 0 is SN
-                if (existingSN == sn) {
-                    // SN found - Update row data
-                    modelTable1.setValueAt(model, i, 1); // Update Model
-                    modelTable1.setValueAt(brand, i, 2); // Update Brand
-                    modelTable1.setValueAt(type, i, 3); // Update Type
-                    modelTable1.setValueAt(price, i, 4); // Update Price
-                    modelTable1.setValueAt(freeService ? "Yes" : "No", i, 5); // Update Free Service
-                    modelTable1.setValueAt(stringType, i, 6); // Update String Type
-                    modelTable1.setValueAt(Quantity, i, 7); // Update Quantity
-                    found1 = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                // If SN does not exist, prompt user to add instead
-                JOptionPane.showMessageDialog(this, "Serial Number not found! Please add the guitar instead.");
-            }
-
-            // Clear input fields after processing
-            sntext.setText("");
-            guitarmodeltext.setText("");
-            pricetext.setText("");
-            brandcombo.setSelectedIndex(0);
-            typecombo1.setSelectedIndex(0);
-            stringtypecombo.setSelectedIndex(0);
-            servicebox.setSelected(false);
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid input format! Please check your entries.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + ex.getMessage());
+        if (!Validation.isValidQuantity(Quantity)) {
+            JOptionPane.showMessageDialog(this, "Invalid Quantity! Quantity must be a valid positive number and greater than 0.");
+            return;
         }
+
+        // Iterate through the table to find the SN
+        for (int i = 0; i < modelTable.getRowCount(); i++) {
+            int existingSN = (int) modelTable.getValueAt(i, 0); // Column 0 is SN
+            if (existingSN == sn) {
+                // SN found - Update row data
+                modelTable.setValueAt(model, i, 1); // Update Model
+                modelTable.setValueAt(brand, i, 2); // Update Brand
+                modelTable.setValueAt(type, i, 3); // Update Type
+                modelTable.setValueAt(price, i, 4); // Update Price
+                modelTable.setValueAt(freeService ? "Yes" : "No", i, 5); // Update Free Service
+                modelTable.setValueAt(stringType, i, 6); // Update String Type
+                modelTable.setValueAt(Quantity, i, 7); // Update Quantity
+                
+                // Push action to stack
+                String action = sn + " " + model;
+                recentEdits.push(action);
+
+                // Update recents panel (newly edited)
+                newlyeditedtext.setText(recentEdits.getRecentActions());
+                
+                found = true;
+                JOptionPane.showMessageDialog(this, "Guitar updated successfully!");
+                break;
+            }
+        }
+
+        // Iterate through the table to find the SN
+        for (int i = 0; i < modelTable1.getRowCount(); i++) {
+            int existingSN = (int) modelTable1.getValueAt(i, 0); // Column 0 is SN
+            if (existingSN == sn) {
+                // SN found - Update row data
+                modelTable1.setValueAt(model, i, 1); // Update Model
+                modelTable1.setValueAt(brand, i, 2); // Update Brand
+                modelTable1.setValueAt(type, i, 3); // Update Type
+                modelTable1.setValueAt(price, i, 4); // Update Price
+                modelTable1.setValueAt(freeService ? "Yes" : "No", i, 5); // Update Free Service
+                modelTable1.setValueAt(stringType, i, 6); // Update String Type
+                modelTable1.setValueAt(Quantity, i, 7); // Update Quantity
+                found1 = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            // If SN does not exist, prompt user to add instead
+            JOptionPane.showMessageDialog(this, "Serial Number not found! Please add the guitar instead.");
+        }
+
+        // Clear input fields after processing
+        sntext.setText("");
+        guitarmodeltext.setText("");
+        pricetext.setText("");
+        brandcombo.setSelectedIndex(0);
+        typecombo1.setSelectedIndex(0);
+        stringtypecombo.setSelectedIndex(0);
+        servicebox.setSelected(false);
+        quantity.setText("");
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Invalid input format! Please check your entries.");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + ex.getMessage());
+    }
     }//GEN-LAST:event_updatebuttonMouseClicked
 
     private void deletebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletebuttonMouseClicked
@@ -1242,58 +1266,48 @@ public class StringTheoryGuitar extends javax.swing.JFrame {
     }//GEN-LAST:event_sorttypeActionPerformed
 
     private void searchguitarsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchguitarsMouseClicked
-        searchGuitarspanel();
-    }//GEN-LAST:event_searchguitarsMouseClicked
-
-    private void binarysearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binarysearchActionPerformed
-        if (binarysearch.isSelected()) {
-            sortbyguitars.setEnabled(true);
-        } else {
-            sortbyguitars.setEnabled(false);
-        }
-    }//GEN-LAST:event_binarysearchActionPerformed
-
-
-private void searchGuitarspanel() {
-    String searchText = searchguitarsfield.getText().trim().toLowerCase();
-    boolean useBinarySearch = binarysearch.isSelected();
-
-    DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
-    List<GuitarDetails> searchList = new ArrayList<>();
-
-    // Populate searchList from the table
-    for (int i = 0; i < model.getRowCount(); i++) {
-        searchList.add(new GuitarDetails(
-                (int) model.getValueAt(i, 0),
-                (String) model.getValueAt(i, 1),
-                (String) model.getValueAt(i, 2),
-                (String) model.getValueAt(i, 3),
-                (double) model.getValueAt(i, 4),
-                "Yes".equals(model.getValueAt(i, 5)),
-                (String) model.getValueAt(i, 6),
-                (int) model.getValueAt(i, 7)
-        ));
-    }
-
-    if (searchText.isEmpty()) {
-        // If search text is empty, repopulate the table with the original data
-        refreshGuitarspanelTable();
+    String searchName = searchguitarsfield.getText().trim().toLowerCase(); // Convert to lowercase for case-insensitive search
+    if (searchName.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a guitar name to search.");
         return;
     }
 
-    if (useBinarySearch) {
-        // Binary Search (Only by Name)
+    // Create a list of guitars and pre-process names for searching
+    List<GuitarDetails> guitars = new ArrayList<>();
+    for (GuitarDetails guitar : guitarList) {
+        // Add each guitar to the search list, ensuring name is properly formatted
+        guitars.add(guitar);
+    }
 
-        // Sort by Name for binary search to work correctly
-        Collections.sort(searchList, Comparator.comparing(GuitarDetails::getName));
+    // Sort using MergeSort
+        MergeSort.sort(guitars, (g1, g2) -> 
+        g1.getName().toLowerCase().compareTo(g2.getName().toLowerCase()));
 
-        int index = BinarySearch.search(searchList, searchText); // Use the updated BinarySearch
-
-        if (index != -1) {
-            // Found: Update the table with the single result
-            model.setRowCount(0);
-            GuitarDetails guitar = searchList.get(index);
-            model.addRow(new Object[]{
+    // Perform binary search
+    int index = BinarySearch.search(guitars, searchName);
+    DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
+    
+    if (index != -1) {
+        model.setRowCount(0);
+        GuitarDetails foundGuitar = guitars.get(index);
+        model.addRow(new Object[]{
+            foundGuitar.getSn(),
+            foundGuitar.getName(),
+            foundGuitar.getBrand(),
+            foundGuitar.getType(),
+            foundGuitar.getPrice(),
+            foundGuitar.isFreeService() ? "Yes" : "No",
+            foundGuitar.getStringType(),
+            foundGuitar.getQuantity()
+        });
+    } else {
+        // Try partial match search if exact match fails
+        boolean found = false;
+        model.setRowCount(0);
+        
+        for (GuitarDetails guitar : guitars) {
+            if (guitar.getName().toLowerCase().contains(searchName)) {
+                model.addRow(new Object[]{
                     guitar.getSn(),
                     guitar.getName(),
                     guitar.getBrand(),
@@ -1302,43 +1316,74 @@ private void searchGuitarspanel() {
                     guitar.isFreeService() ? "Yes" : "No",
                     guitar.getStringType(),
                     guitar.getQuantity()
-            });
-        } else {
-            // Not found
-            JOptionPane.showMessageDialog(this, "No guitars found matching the search criteria.");
-        }
-
-    } else {
-        // Linear Search
-        List<GuitarDetails> results = LinearSearch.search(searchList, searchText); // Use your existing LinearSearch
-
-        if (results.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No guitars found matching the search criteria.");
-        } else {
-            // Update the table with search results
-            model.setRowCount(0);
-            for (GuitarDetails guitar : results) {
-                model.addRow(new Object[]{
-                        guitar.getSn(),
-                        guitar.getName(),
-                        guitar.getBrand(),
-                        guitar.getType(),
-                        guitar.getPrice(),
-                        guitar.isFreeService() ? "Yes" : "No",
-                        guitar.getStringType(),
-                        guitar.getQuantity()
                 });
+                found = true;
             }
         }
+        
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "Guitar not found.");
+            refreshTableData();
+        }
     }
-}
-    
-    // Helper method to refresh the table with original data
-    private void refreshGuitarspanelTable() {
+
+    }//GEN-LAST:event_searchguitarsMouseClicked
+
+
+
+    private void sorttypeguitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sorttypeguitarActionPerformed
+        sortDataGuitarsPanel();
+    }//GEN-LAST:event_sorttypeguitarActionPerformed
+
+    private void sortbyguitarsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortbyguitarsActionPerformed
+        sortDataGuitarsPanel();
+    }//GEN-LAST:event_sortbyguitarsActionPerformed
+
+    private void RecentViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RecentViewMouseClicked
+        adminpanel.setVisible(false);
+        homepanel.setVisible(false);
+        guitarspanel.setVisible(false);
+        recentspanel.setVisible(true);
+    }//GEN-LAST:event_RecentViewMouseClicked
+
+    private void RecentViewMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RecentViewMouseEntered
+        RecentView.setBackground(new Color(162, 151, 139));
+    }//GEN-LAST:event_RecentViewMouseEntered
+
+    private void RecentViewMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RecentViewMouseExited
+        RecentView.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_RecentViewMouseExited
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+       refreshTableData(); 
+        searchguitarsfield.setText("");
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void ClearrecentsbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearrecentsbuttonMouseEntered
+        Clearrecentsbutton.setBackground(new Color(162, 151, 139));
+    }//GEN-LAST:event_ClearrecentsbuttonMouseEntered
+
+    private void ClearrecentsbuttonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearrecentsbuttonMouseExited
+        Clearrecentsbutton.setBackground(new Color(207,193,178));
+    }//GEN-LAST:event_ClearrecentsbuttonMouseExited
+
+    private void ClearrecentsbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClearrecentsbuttonMouseClicked
+        clearRecentActionsLIFO(newlyaddedtext, recentActions);
+        clearRecentActionsLIFO(newlyeditedtext, recentEdits);
+    }//GEN-LAST:event_ClearrecentsbuttonMouseClicked
+    private void clearRecentActionsLIFO(javax.swing.JTextArea textArea, CustomStack stack) {
+        if (!stack.isEmpty()) {
+            // Pop the last action from the stack
+            stack.pop(); 
+
+            // Update the text area with the remaining actions
+            textArea.setText(stack.getRecentActions());
+        }
+    }
+        private void refreshTableData() {
         DefaultTableModel model = (DefaultTableModel) guitartable1.getModel();
         model.setRowCount(0); // Clear the table
 
-        // Repopulate the table with the original data
         for (GuitarDetails guitar : guitarList) {
             model.addRow(new Object[]{
                 guitar.getSn(),
@@ -1352,14 +1397,6 @@ private void searchGuitarspanel() {
             });
         }
     }
-
-    private void sorttypeguitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sorttypeguitarActionPerformed
-        sortDataGuitarsPanel();
-    }//GEN-LAST:event_sorttypeguitarActionPerformed
-
-    private void sortbyguitarsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortbyguitarsActionPerformed
-        sortDataGuitarsPanel();
-    }//GEN-LAST:event_sortbyguitarsActionPerformed
 
         private void sortData() {
         String sortBy = (String) sortby.getSelectedItem();
@@ -1560,17 +1597,15 @@ private void searchGuitarspanel() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel aboutp1;
-    private javax.swing.JLabel aboutp2;
-    private javax.swing.JLabel aboutusbutton;
-    private javax.swing.JPanel aboutuspanel;
+    private javax.swing.JLabel Background;
+    private javax.swing.JLabel Clearrecentsbutton;
+    private javax.swing.JLabel RecentView;
     private javax.swing.JLabel aboutustitle;
     private javax.swing.JLabel addbutton;
     private javax.swing.JLabel adminbutton;
     private javax.swing.JPanel adminpanel;
     private javax.swing.JLabel adminpaneltext;
     private javax.swing.JLabel backgroundimg;
-    private javax.swing.JCheckBox binarysearch;
     private javax.swing.JComboBox<String> brandcombo;
     private javax.swing.JLabel clearbutton;
     private javax.swing.JLabel deletebutton;
@@ -1587,28 +1622,29 @@ private void searchGuitarspanel() {
     private javax.swing.JPanel homepanel;
     private javax.swing.JLabel homeviewguitar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel loginbutton;
     private javax.swing.JPanel loginpanel;
     private javax.swing.JLabel logoutbutton;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JPanel navigationbar;
+    private javax.swing.JTextArea newlyaddedtext;
+    private javax.swing.JTextArea newlyeditedtext;
     private javax.swing.JLabel passlabel;
     private javax.swing.JPasswordField passtextfield;
     private javax.swing.JTextField pricetext;
     private javax.swing.JTextField quantity;
+    private javax.swing.JLabel recentlytext;
+    private javax.swing.JLabel recentlytextedit;
+    private javax.swing.JLabel recentsbutton;
+    private javax.swing.JPanel recentspanel;
+    private javax.swing.JButton resetButton;
     private javax.swing.JLabel searchguitars;
     private javax.swing.JTextField searchguitarsfield;
     private javax.swing.JCheckBox servicebox;

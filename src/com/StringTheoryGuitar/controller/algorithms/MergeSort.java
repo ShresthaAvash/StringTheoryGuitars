@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 /**
  *
- * @author PC
+ * @author 23048676 Avash Shrestha
  */
 public class MergeSort {
         public static <T> void sort(List<T> list, Comparator<? super T> c) {

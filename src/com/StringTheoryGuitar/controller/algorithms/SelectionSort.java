@@ -6,7 +6,7 @@ package com.StringTheoryGuitar.controller.algorithms;
 
 /**
  *
- * @author PC
+ * @author 23048676 Avash Shrestha
  */
 import java.util.Comparator;
 import java.util.List;

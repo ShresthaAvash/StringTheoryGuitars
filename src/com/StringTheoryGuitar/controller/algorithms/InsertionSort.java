@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author PC
+ * @author 23048676 Avash Shrestha
  */
 public class InsertionSort {
     public static <T> void sort(List<T> list, Comparator<? super T> c) {

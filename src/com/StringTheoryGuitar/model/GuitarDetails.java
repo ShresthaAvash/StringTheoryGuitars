@@ -6,7 +6,7 @@ package com.StringTheoryGuitar.model;
 
 /**
  *
- * @author Avash Shrestha
+ * @author 23048676 Avash Shrestha
  */
 
 public class GuitarDetails {

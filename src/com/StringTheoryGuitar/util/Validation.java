@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author PC
+ * @author 23048676 Avash Shrestha
  */
 public class Validation {
     // Validate Serial Number (must be unique and > 0)
